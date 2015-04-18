@@ -71,11 +71,17 @@ minetest.register_node("mycoins:home_computer",{
 	sounds = default.node_sound_wood_defaults(),
 	after_place_node = function(pos, placer)
 		local meta = minetest.get_meta(pos)
+		local timer = minetest.get_node_timer(pos)
 		meta:set_string("owner", placer:get_player_name() or "")
 		meta:set_string("infotext", "Home Computer (owner "..
 		meta:get_string("owner")..")")
-		-- hacky_swap_node(pos,"mycoins:game_computer_active")
-	end,
+		timer:start(60)
+		end,
+	on_timer = function(pos)
+		local timer = minetest.get_node_timer(pos)
+		minetest.swap_node(pos, {name = 'mycoins:home_computer_active'})
+		timer:start(1300)
+		end,
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
 		meta:set_string("formspec", default.game_computer_formspec(pos))
@@ -165,7 +171,12 @@ minetest.register_node("mycoins:home_computer_active",{
 		meta:set_string("owner", placer:get_player_name() or "")
 		meta:set_string("infotext", "Home Computer (owner "..
 		meta:get_string("owner")..")")
-	end,
+		end,
+	on_timer = function(pos)
+		local timer = minetest.get_node_timer(pos)
+		minetest.get_meta(pos):get_inventory():add_item("main", "mycoins:bitcent")
+		timer:start(1300)
+		end,
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
 		meta:set_string("formspec", default.home_computer_formspec(pos))
@@ -253,9 +264,11 @@ minetest.register_node("mycoins:game_computer",{
 	sounds = default.node_sound_wood_defaults(),
 	after_place_node = function(pos, placer)
 		local meta = minetest.get_meta(pos)
+		local timer = minetest.get_node_timer(pos)
 		meta:set_string("owner", placer:get_player_name() or "")
 		meta:set_string("infotext", "Gaming Computer (owner "..
 		meta:get_string("owner")..")")
+		timer:start(60)
 	end,
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
@@ -269,6 +282,11 @@ minetest.register_node("mycoins:game_computer",{
 		local inv = meta:get_inventory()
 		return inv:is_empty("main") and has_game_computer_privilege(meta, player)
 	end,
+	on_timer = function(pos)
+		local timer = minetest.get_node_timer(pos)
+		minetest.swap_node(pos, {name = 'mycoins:game_computer_active'})
+		timer:start(800)
+		end,
 	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
 		local meta = minetest.get_meta(pos)
 		if not has_game_computer_privilege(meta, player) then
@@ -360,6 +378,11 @@ minetest.register_node("mycoins:game_computer_active",{
 		local inv = meta:get_inventory()
 		return inv:is_empty("main") and has_game_computer_privilege(meta, player)
 	end,
+	on_timer = function(pos)
+		local timer = minetest.get_node_timer(pos)
+		minetest.get_meta(pos):get_inventory():add_item("main", "mycoins:bitcent")
+		timer:start(800)
+		end,
 	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
 		local meta = minetest.get_meta(pos)
 		if not has_game_computer_privilege(meta, player) then
@@ -434,10 +457,11 @@ minetest.register_node("mycoins:alien_computer",{
 	sounds = default.node_sound_wood_defaults(),
 	after_place_node = function(pos, placer)
 		local meta = minetest.get_meta(pos)
+		local timer = minetest.get_node_timer(pos)
 		meta:set_string("owner", placer:get_player_name() or "")
 		meta:set_string("infotext", "Alienware Computer (owner "..
 		meta:get_string("owner")..")")
-		-- hacky_swap_node(pos,"mycoins:game_computer_active")
+		timer:start(60)
 	end,
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
@@ -451,6 +475,11 @@ minetest.register_node("mycoins:alien_computer",{
 		local inv = meta:get_inventory()
 		return inv:is_empty("main") and has_alien_computer_privilege(meta, player)
 	end,
+	on_timer = function(pos)
+		local timer = minetest.get_node_timer(pos)
+		minetest.swap_node(pos, {name = 'mycoins:alien_computer_active'})
+		timer:start(600)
+		end,
 	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
 		local meta = minetest.get_meta(pos)
 		if not has_alien_computer_privilege(meta, player) then
@@ -536,6 +565,11 @@ minetest.register_node("mycoins:alien_computer_active",{
 		local inv = meta:get_inventory()
 		inv:set_size("main", 4*2)
 		minetest.get_node_timer(pos):start(600,0)
+		end,
+	on_timer = function(pos)
+		local timer = minetest.get_node_timer(pos)
+		minetest.get_meta(pos):get_inventory():add_item("main", "mycoins:bitcent")
+		timer:start(600)
 		end,
 	can_dig = function(pos,player)
 		local meta = minetest.get_meta(pos);

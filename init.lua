@@ -1,6 +1,6 @@
 
 --++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
--- mycoins by MilesDyson@DistroGeeks.com                                              +
+-- mycoins by MilesDyson@DistroGeeks.com                                               +
 --                                                                                     +
 -- LICENSE: WTFPL DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE; applies to all parts,   +
 -- Including all images.                                                               +
@@ -16,7 +16,7 @@ dofile(minetest.get_modpath("mycoins").."/modrecipes.lua")
 
 
 --= Change Home/Game/Alien Computer that isn't yours to active position
-
+--[[ THIS IS ALL ACCOMPLSIHED WITH TIMERS NOW, FEEL FREE TO REMOVE THIS TEXT
 minetest.register_abm({
 	nodenames = {"mycoins:home_computer", "mycoins:game_computer", "mycoins:alien_computer"},
 	interval = 60.0,
@@ -86,5 +86,5 @@ minetest.register_abm({
 		end
 	end,
 })
-
+--]]
 print("mycoins mod loaded!")
