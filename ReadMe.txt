@@ -85,7 +85,7 @@ X X X
 
 26th March 2014, Removed Homedecor, Mesecons and Moreores dependencies (TenPlus1), reduced abm's to only 2
 
-
+April 2015, Updates by DonBatman and Nathan.S Removed all ABMs, updated the mod to work with current versions of Minetest, improved code and added more visual feedback.
 
 
 Enjoy!! :D
