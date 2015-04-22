@@ -38,7 +38,7 @@ minetest.register_craftitem( "mycoins:bitcoin", {
 -- Home Computer
 
 minetest.register_craftitem( "mycoins:home_computer_video", {
-	description = "Home Computer Video Cark",
+	description = "Home Computer Video Card",
 	stack_max = 1,
 	inventory_image = "mycoins_home_computer_video.png",
 	on_place_on_ground = minetest.craftitem_place_item,
@@ -103,7 +103,7 @@ minetest.register_craftitem( "mycoins:home_computer_ram", {
 -- Game Computer
 
 minetest.register_craftitem( "mycoins:game_computer_video", {
-	description = "Gaming Computer Video Cark",
+	description = "Gaming Computer Video Card",
 	stack_max = 1,
 	inventory_image = "mycoins_game_computer_video.png",
 	on_place_on_ground = minetest.craftitem_place_item,
