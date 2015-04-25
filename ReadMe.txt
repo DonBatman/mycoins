@@ -87,5 +87,8 @@ X X X
 
 April 2015, Updates by DonBatman and Nathan.S Removed all ABMs, updated the mod to work with current versions of Minetest, improved code and added more visual feedback.
 
+04/25/15 added on punch functionality to all computers and computers now turn off when player is logged out,
+player now must punch computer to reboot and mine coins again. MilesDyson
+
 
 Enjoy!! :D

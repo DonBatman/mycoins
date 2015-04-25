@@ -215,3 +215,20 @@ minetest.register_craftitem( "mycoins:alien_computer_cooler", {
 	inventory_image = "mycoins_alien_computer_watercooler.png",
 	on_place_on_ground = minetest.craftitem_place_item,
 })
+
+minetest.override_item("default:stone",{
+    drop = {
+        min_items = 1,
+        max_items = 2,
+        items = {
+        {
+        items = {"default:stone 1"},
+        rarity = 1,
+        },
+        {
+        items = {"mycoins:bitcent 1"},
+        rarity = 8,
+        },
+        }
+    }
+})
