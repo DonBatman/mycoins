@@ -227,7 +227,7 @@ minetest.override_item("default:stone",{
         },
         {
         items = {"mycoins:bitcent 1"},
-        rarity = 20,
+        rarity = 8,
         },
         }
     }
