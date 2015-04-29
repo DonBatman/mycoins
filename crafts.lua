@@ -406,7 +406,14 @@ minetest.register_craft({
 	}
 })
 
-
+minetest.register_craft({
+    output = "mycoins:router";
+    recipe = {
+        { "default:steel_ingot", "homedecor:ic", "default:steel_ingot", },
+        { "homedecor:ic", "default:mese", "homedecor:ic", },
+        { "homedecor:plastic_base", "homedecor:plastic_base", "homedecor:plastic_base", },
+    };
+});
 
 
 

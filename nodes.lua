@@ -9,7 +9,13 @@ end
 function default.computer_formspec(pos)
 	local spos = pos.x .. "," .. pos.y .. "," ..pos.z
 	local formspec = "size[10,10]"..
-		"label[2,2;Booting a proprietary OS, this could take a while...]" ..
+	   "image[1,0.5;1.2,1.2;tux.png]"..
+		"label[2,0.8;Initializing basic system settings	... OK]" ..
+		"label[2,1.1;Mounting local filesystems			... OK]" ..
+		"label[2,1.4;Enabling swap space						... OK]" ..
+		"label[2,1.7;Setting up console						... OK]" ..
+		"label[2,2;Operaing System Loaded					... OK]" ..
+		"label[2,2.3;Starting cgminer 3.7.2 ]" ..
 		"list[nodemeta:".. spos .. ";main;1,3;8,1;]"..
 		"list[current_player;main;1,6;8,4;]"
 	return formspec
@@ -27,8 +33,13 @@ end
 function default.active_computer_formspec(pos)
 	local spos = pos.x .. "," .. pos.y .. "," ..pos.z
 	local formspec = "size[10,10]"..
-		"label[2,2;Mining coins.]" ..
-		"label[2,2.5;Upgrade your computer to mine faster.]" ..
+		"label[2,0.0;cgminer version 3.7.2 - Started]" ..
+		"label[2,0.2;----------------------------------------------------------------------------------]" ..
+		"label[2,0.4;5s:468.9K avg:468.8Kh/s : A:2304 R:0 HW:0 WU:394.4/m]" ..
+		"label[2,0.7;ST: 2  SS: 0  NB: 1909  LW: 34901  GF: 14  RF: 7]" ..
+		"label[2,1;Connected to stratum.max.bitcoin.com diff 1.02k with stratum.]" ..
+		"label[2,1.3;Block: 31dca6d... Diff:104 Started: 09:24:05 Best share: 618K.]" ..
+		"label[2,1.5;----------------------------------------------------------------------------------]" ..
 		"list[nodemeta:".. spos .. ";main;1,3;8,1;]"..
 		"list[current_player;main;1,6;8,4;]"
 	return formspec
@@ -44,20 +55,11 @@ function default.computer_wifi_formspec(pos)
 	return formspec
 end
 
-
-
-
 -- Home Computer
-
 minetest.register_node("mycoins:home_computer",{
 	drawtype = "nodebox",
 	description = "Home Computer",
-	tiles = {"mycoins_home_computer_tp.png",
-	      "mycoins_home_computer_bt.png",
-			"mycoins_home_computer_rt.png",
-			"mycoins_home_computer_lt.png",
-			"mycoins_home_computer_bk.png",
-			"mycoins_home_computer_ft_off.png"},
+	tiles = {"mycoins_home_computer_tp.png","mycoins_home_computer_bt.png","mycoins_home_computer_rt.png","mycoins_home_computer_lt.png","mycoins_home_computer_bk.png","mycoins_home_computer_ft_off.png"},
 	paramtype = "light",
 	paramtype2 = "facedir",
 	drop = "mycoins:home_computer",
@@ -70,7 +72,6 @@ minetest.register_node("mycoins:home_computer",{
 			{-0.500000,-0.500000,-0.500000,0.500000,-0.375,-0.03125},
 		},
 	},
-	
 	sounds = default.node_sound_wood_defaults(),
 	after_place_node = function(pos, placer)
 		local meta = minetest.get_meta(pos)
@@ -168,15 +169,7 @@ minetest.register_node("mycoins:home_computer",{
 		return count
 	end,
 	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
-		local meta = minetest.get_meta(pos)
-		if not computer_owner(meta, player) then
-			minetest.log("action", player:get_player_name()..
-					" tried to access a locked chest belonging to "..
-					meta:get_string("owner").." at "..
-					minetest.pos_to_string(pos))
-			return 0
-		end
-		return stack:get_count()
+		return 0
 	end,
     allow_metadata_inventory_take = function(pos, listname, index, stack, player)
 		local meta = minetest.get_meta(pos)
@@ -189,30 +182,12 @@ minetest.register_node("mycoins:home_computer",{
 		end
 		return stack:get_count()
 	end,
-	on_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
-		minetest.log("action", player:get_player_name()..
-				" moves stuff in home computer at "..minetest.pos_to_string(pos))
-	end,
-   on_metadata_inventory_put = function(pos, listname, index, stack, player)
-		minetest.log("action", player:get_player_name()..
-				" moves stuff to home computer at "..minetest.pos_to_string(pos))
-	end,
-    on_metadata_inventory_take = function(pos, listname, index, stack, player)
-		minetest.log("action", player:get_player_name()..
-				" takes stuff from home computer at "..minetest.pos_to_string(pos))
-	end,
-
 })
 
 minetest.register_node("mycoins:home_computer_active",{
 	drawtype = "nodebox",
 	description = "Home Computer",
-	tiles = {"mycoins_home_computer_tp.png",
-	      "mycoins_home_computer_bt.png",
-			"mycoins_home_computer_rt.png",
-			"mycoins_home_computer_lt.png",
-			"mycoins_home_computer_bk.png",
-			"mycoins_home_computer_ft.png"},
+	tiles = {"mycoins_home_computer_tp.png","mycoins_home_computer_bt.png","mycoins_home_computer_rt.png","mycoins_home_computer_lt.png","mycoins_home_computer_bk.png","mycoins_home_computer_ft.png"},
 	paramtype = "light",
 	paramtype2 = "facedir",
 	light_source = 8,
@@ -227,7 +202,6 @@ minetest.register_node("mycoins:home_computer_active",{
 		},
 	},
 	sounds = default.node_sound_wood_defaults(),
-	
 	on_timer = function(pos)
 		local meta = minetest.get_meta(pos)
 		if ( minetest.get_player_by_name(meta:get_string("owner")) == nil ) then
@@ -273,7 +247,6 @@ minetest.register_node("mycoins:home_computer_active",{
 		inv:set_size("main", 4*2)
 		timer:stop()
 	end,
-
 	can_dig = function(pos,player)
 		local meta = minetest.get_meta(pos);
 		local inv = meta:get_inventory()
@@ -291,15 +264,7 @@ minetest.register_node("mycoins:home_computer_active",{
 		return count
 	end,
 	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
-		local meta = minetest.get_meta(pos)
-		if not computer_owner(meta, player) then
-			minetest.log("action", player:get_player_name()..
-					" tried to access a locked chest belonging to "..
-					meta:get_string("owner").." at "..
-					minetest.pos_to_string(pos))
-			return 0
-		end
-		return stack:get_count()
+		return 0
 	end,
     allow_metadata_inventory_take = function(pos, listname, index, stack, player)
 		local meta = minetest.get_meta(pos)
@@ -312,31 +277,13 @@ minetest.register_node("mycoins:home_computer_active",{
 		end
 		return stack:get_count()
 	end,
-	on_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
-		minetest.log("action", player:get_player_name()..
-				" moves stuff in home computer at "..minetest.pos_to_string(pos))
-	end,
-   on_metadata_inventory_put = function(pos, listname, index, stack, player)
-		minetest.log("action", player:get_player_name()..
-				" moves stuff to home computer at "..minetest.pos_to_string(pos))
-	end,
-    on_metadata_inventory_take = function(pos, listname, index, stack, player)
-		minetest.log("action", player:get_player_name()..
-				" takes stuff from home computer at "..minetest.pos_to_string(pos))
-	end,
 })
 
 -- Game Computer
-
 minetest.register_node("mycoins:game_computer",{
 	drawtype = "nodebox",
 	description = "Gaming Computer",
-	tiles = {"mycoins_game_computer_tp.png",
-	      "mycoins_game_computer_bt.png",
-			"mycoins_game_computer_rt.png",
-			"mycoins_game_computer_lt.png",
-			"mycoins_game_computer_bk.png",
-			"mycoins_game_computer_ft_off.png"},
+	tiles = {"mycoins_game_computer_tp.png","mycoins_game_computer_bt.png","mycoins_game_computer_rt.png","mycoins_game_computer_lt.png","mycoins_game_computer_bk.png","mycoins_game_computer_ft_off.png"},
 	paramtype = "light",
 	paramtype2 = "facedir",
 	drop = "mycoins:game_computer",
@@ -447,15 +394,7 @@ minetest.register_node("mycoins:game_computer",{
 		return count
 	end,
 	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
-		local meta = minetest.get_meta(pos)
-		if not computer_owner(meta, player) then
-			minetest.log("action", player:get_player_name()..
-					" tried to access a locked chest belonging to "..
-					meta:get_string("owner").." at "..
-					minetest.pos_to_string(pos))
-			return 0
-		end
-		return stack:get_count()
+		return 0
 	end,
     allow_metadata_inventory_take = function(pos, listname, index, stack, player)
 		local meta = minetest.get_meta(pos)
@@ -468,30 +407,12 @@ minetest.register_node("mycoins:game_computer",{
 		end
 		return stack:get_count()
 	end,
-	on_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
-		minetest.log("action", player:get_player_name()..
-				" moves stuff in gaming computer at "..minetest.pos_to_string(pos))
-	end,
-   on_metadata_inventory_put = function(pos, listname, index, stack, player)
-		minetest.log("action", player:get_player_name()..
-				" moves stuff to gaming computer at "..minetest.pos_to_string(pos))
-	end,
-    on_metadata_inventory_take = function(pos, listname, index, stack, player)
-		minetest.log("action", player:get_player_name()..
-				" takes stuff from gaming computer at "..minetest.pos_to_string(pos))
-	end,
-
 })
 
 minetest.register_node("mycoins:game_computer_active",{
 	drawtype = "nodebox",
 	description = "Home Computer",
-	tiles = {"mycoins_game_computer_tp.png",
-	      "mycoins_game_computer_bt.png",
-			"mycoins_game_computer_rt.png",
-			"mycoins_game_computer_lt.png",
-			"mycoins_game_computer_bk.png",
-			"mycoins_game_computer_ft.png"},
+	tiles = {"mycoins_game_computer_tp.png","mycoins_game_computer_bt.png","mycoins_game_computer_rt.png","mycoins_game_computer_lt.png","mycoins_game_computer_bk.png","mycoins_game_computer_ft.png"},
 	paramtype = "light",
 	paramtype2 = "facedir",
 	light_source = 8,
@@ -505,7 +426,6 @@ minetest.register_node("mycoins:game_computer_active",{
 			{-0.500000,-0.500000,-0.500000,0.500000,-0.375,-0.03125},
 		},
 	},
-	
 	sounds = default.node_sound_wood_defaults(),
 	can_dig = function(pos,player)
 		local meta = minetest.get_meta(pos);
@@ -569,15 +489,7 @@ minetest.register_node("mycoins:game_computer_active",{
 		return count
 	end,
 	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
-		local meta = minetest.get_meta(pos)
-		if not computer_owner(meta, player) then
-			minetest.log("action", player:get_player_name()..
-					" tried to access a locked chest belonging to "..
-					meta:get_string("owner").." at "..
-					minetest.pos_to_string(pos))
-			return 0
-		end
-		return stack:get_count()
+		return 0
 	end,
     allow_metadata_inventory_take = function(pos, listname, index, stack, player)
 		local meta = minetest.get_meta(pos)
@@ -590,31 +502,13 @@ minetest.register_node("mycoins:game_computer_active",{
 		end
 		return stack:get_count()
 	end,
-	on_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
-		minetest.log("action", player:get_player_name()..
-				" moves stuff in gaming computer at "..minetest.pos_to_string(pos))
-	end,
-   on_metadata_inventory_put = function(pos, listname, index, stack, player)
-		minetest.log("action", player:get_player_name()..
-				" moves stuff to gaming computer at "..minetest.pos_to_string(pos))
-	end,
-    on_metadata_inventory_take = function(pos, listname, index, stack, player)
-		minetest.log("action", player:get_player_name()..
-				" takes stuff from gaming computer at "..minetest.pos_to_string(pos))
-	end,
 })
 
 -- Alienware Computer
-
 minetest.register_node("mycoins:alien_computer",{
 	drawtype = "nodebox",
 	description = "Alienware Computer",
-	tiles = {"mycoins_alien_computer_tp.png",
-	      "mycoins_alien_computer_bt.png",
-			"mycoins_alien_computer_rt.png",
-			"mycoins_alien_computer_lt.png",
-			"mycoins_alien_computer_bk.png",
-			"mycoins_alien_computer_ft_off.png"},
+	tiles = {"mycoins_alien_computer_tp.png","mycoins_alien_computer_bt.png","mycoins_alien_computer_rt.png","mycoins_alien_computer_lt.png","mycoins_alien_computer_bk.png","mycoins_alien_computer_ft_off.png"},
 	paramtype = "light",
 	paramtype2 = "facedir",
 	drop = "mycoins:alien_computer",
@@ -627,7 +521,6 @@ minetest.register_node("mycoins:alien_computer",{
 			{-0.500000,-0.500000,-0.500000,0.500000,-0.375,-0.03125},
 		},
 	},
-	
 	sounds = default.node_sound_wood_defaults(),
 	after_place_node = function(pos, placer)
 		local meta = minetest.get_meta(pos)
@@ -645,7 +538,6 @@ minetest.register_node("mycoins:alien_computer",{
 		local inv = meta:get_inventory()
 		inv:set_size("main", 4*2)
 		end,
-
 	can_dig = function(pos,player)
 		local meta = minetest.get_meta(pos);
 		return computer_owner(meta, player)
@@ -727,15 +619,7 @@ minetest.register_node("mycoins:alien_computer",{
 		return count
 	end,
 	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
-		local meta = minetest.get_meta(pos)
-		if not computer_owner(meta, player) then
-			minetest.log("action", player:get_player_name()..
-					" tried to access a Alienware computer belonging to "..
-					meta:get_string("owner").." at "..
-					minetest.pos_to_string(pos))
-			return 0
-		end
-		return stack:get_count()
+		return 0
 	end,
     allow_metadata_inventory_take = function(pos, listname, index, stack, player)
 		local meta = minetest.get_meta(pos)
@@ -748,30 +632,12 @@ minetest.register_node("mycoins:alien_computer",{
 		end
 		return stack:get_count()
 	end,
-	on_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
-		minetest.log("action", player:get_player_name()..
-				" moves stuff in Alienware computer at "..minetest.pos_to_string(pos))
-	end,
-   on_metadata_inventory_put = function(pos, listname, index, stack, player)
-		minetest.log("action", player:get_player_name()..
-				" moves stuff to Alienware computer at "..minetest.pos_to_string(pos))
-	end,
-    on_metadata_inventory_take = function(pos, listname, index, stack, player)
-		minetest.log("action", player:get_player_name()..
-				" takes stuff from Alienware computer at "..minetest.pos_to_string(pos))
-	end,
-
 })
 
 minetest.register_node("mycoins:alien_computer_active",{
 	drawtype = "nodebox",
 	description = "Alienware Computer",
-	tiles = {"mycoins_alien_computer_tp.png",
-	      "mycoins_alien_computer_bt.png",
-			"mycoins_alien_computer_rt.png",
-			"mycoins_alien_computer_lt.png",
-			"mycoins_alien_computer_bk.png",
-			"mycoins_alien_computer_ft.png"},
+	tiles = {"mycoins_alien_computer_tp.png","mycoins_alien_computer_bt.png","mycoins_alien_computer_rt.png","mycoins_alien_computer_lt.png","mycoins_alien_computer_bk.png","mycoins_alien_computer_ft.png"},
 	paramtype = "light",
 	paramtype2 = "facedir",
 	light_source = 8,
@@ -849,15 +715,7 @@ minetest.register_node("mycoins:alien_computer_active",{
 		return count
 	end,
 	allow_metadata_inventory_put = function(pos, listname, index, stack, player)
-		local meta = minetest.get_meta(pos)
-		if not computer_owner(meta, player) then
-			minetest.log("action", player:get_player_name()..
-					" tried to access an Alienware computer belonging to "..
-					meta:get_string("owner").." at "..
-					minetest.pos_to_string(pos))
-			return 0
-		end
-		return stack:get_count()
+		return 0
 	end,
     allow_metadata_inventory_take = function(pos, listname, index, stack, player)
 		local meta = minetest.get_meta(pos)
@@ -869,17 +727,5 @@ minetest.register_node("mycoins:alien_computer_active",{
 			return 0
 		end
 		return stack:get_count()
-	end,
-	on_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
-		minetest.log("action", player:get_player_name()..
-				" moves stuff in Alienware computer at "..minetest.pos_to_string(pos))
-	end,
-   on_metadata_inventory_put = function(pos, listname, index, stack, player)
-		minetest.log("action", player:get_player_name()..
-				" moves stuff to Alienware computer at "..minetest.pos_to_string(pos))
-	end,
-    on_metadata_inventory_take = function(pos, listname, index, stack, player)
-		minetest.log("action", player:get_player_name()..
-				" takes stuff from Alienware computer at "..minetest.pos_to_string(pos))
 	end,
 })
