@@ -222,12 +222,12 @@ minetest.override_item("default:stone",{
         max_items = 2,
         items = {
         {
-        items = {"default:cobble 1"},
+        items = {"default:stone 1"},
         rarity = 1,
         },
         {
         items = {"mycoins:bitcent 1"},
-        rarity = 20,
+        rarity = 8,
         },
         }
     }

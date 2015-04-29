@@ -33,6 +33,16 @@ function default.active_computer_formspec(pos)
 		"list[current_player;main;1,6;8,4;]"
 	return formspec
 end
+ 
+function default.computer_wifi_formspec(pos)
+	local spos = pos.x .. "," .. pos.y .. "," ..pos.z
+	local formspec = "size[10,10]"..
+		"label[2,2;No Internet Connection.]" ..
+		"label[2,2.5;Contact Your Network Administrator For More Information.]" ..
+		"list[nodemeta:".. spos .. ";main;1,3;8,1;]"..
+		"list[current_player;main;1,6;8,4;]"
+	return formspec
+end
 
 
 
@@ -71,41 +81,69 @@ minetest.register_node("mycoins:home_computer",{
 		timer:start(60)
 		end,
 	on_timer = function(pos)
-	local meta = minetest.get_meta(pos)
-	if ( minetest.get_player_by_name(meta:get_string("owner")) == nil ) then
-		local timer = minetest.get_node_timer(pos)
-		local meta = minetest.get_meta(pos)
-		local node = minetest.get_node(pos)
-		minetest.swap_node(pos, {name = 'mycoins:home_computer', param2 = node.param2})
-		meta:set_string("formspec", default.computer_off_formspec(pos))
-		meta:set_string("infotext", "Home Computer (owner "..
-		meta:get_string("owner")..")")
-		local inv = meta:get_inventory()
-		inv:set_size("main", 4*2)
-		timer:stop()
-	else
-		local timer = minetest.get_node_timer(pos)
-		local meta = minetest.get_meta(pos)
-		local node = minetest.get_node(pos)
-		minetest.swap_node(pos, {name = 'mycoins:home_computer_active', param2 = node.param2})
-		meta:set_string("formspec", default.active_computer_formspec(pos))
-		meta:set_string("infotext", "Home Computer (owner "..
-		meta:get_string("owner")..")")
-		local inv = meta:get_inventory()
-		inv:set_size("main", 4*2)
-		timer:start(1300)
-	end	
+		local wifi = minetest.find_node_near(pos, 30, {"mycoins:router_on"})
+		if wifi == nil then
+			local timer = minetest.get_node_timer(pos)
+			local meta = minetest.get_meta(pos)
+			local node = minetest.get_node(pos)
+			minetest.swap_node(pos, {name = 'mycoins:home_computer', param2 = node.param2})
+			meta:set_string("formspec", default.computer_wifi_formspec(pos))
+			meta:set_string("infotext", "Home Computer (owner "..
+			meta:get_string("owner")..")")
+			local inv = meta:get_inventory()
+			inv:set_size("main", 4*2)
+			timer:stop()
+		else
+			local meta = minetest.get_meta(pos)
+			if ( minetest.get_player_by_name(meta:get_string("owner")) == nil ) then
+				local timer = minetest.get_node_timer(pos)
+				local meta = minetest.get_meta(pos)
+				local node = minetest.get_node(pos)
+				minetest.swap_node(pos, {name = 'mycoins:home_computer', param2 = node.param2})
+				meta:set_string("formspec", default.computer_off_formspec(pos))
+				meta:set_string("infotext", "Home Computer (owner "..
+				meta:get_string("owner")..")")
+				local inv = meta:get_inventory()
+				inv:set_size("main", 4*2)
+				timer:stop()
+			else
+				local timer = minetest.get_node_timer(pos)
+				local meta = minetest.get_meta(pos)
+				local node = minetest.get_node(pos)
+				minetest.swap_node(pos, {name = 'mycoins:home_computer_active', param2 = node.param2})
+				meta:set_string("formspec", default.active_computer_formspec(pos))
+				meta:set_string("infotext", "Home Computer (owner "..
+				meta:get_string("owner")..")")
+				local inv = meta:get_inventory()
+				inv:set_size("main", 4*2)
+				timer:start(600)
+			end
+		end
 	end,
 	on_punch = function(pos)
-	local timer = minetest.get_node_timer(pos)
-		local meta = minetest.get_meta(pos)
-		local node = minetest.get_node(pos)
-		meta:set_string("formspec", default.computer_formspec(pos))
-		meta:set_string("infotext", "Home Computer (owner "..
-		meta:get_string("owner")..")")
-		local inv = meta:get_inventory()
-		inv:set_size("main", 4*2)
-		timer:start(60)
+		local wifi = minetest.find_node_near(pos, 30, {"mycoins:router_on"})
+		if wifi == nil then
+			local timer = minetest.get_node_timer(pos)
+			local meta = minetest.get_meta(pos)
+			local node = minetest.get_node(pos)
+			minetest.swap_node(pos, {name = 'mycoins:home_computer', param2 = node.param2})
+			meta:set_string("formspec", default.computer_wifi_formspec(pos))
+			meta:set_string("infotext", "Home Computer (owner "..
+			meta:get_string("owner")..")")
+			local inv = meta:get_inventory()
+			inv:set_size("main", 4*2)
+			timer:stop()
+		else
+			local timer = minetest.get_node_timer(pos)
+			local meta = minetest.get_meta(pos)
+			local node = minetest.get_node(pos)
+			meta:set_string("formspec", default.computer_formspec(pos))
+			meta:set_string("infotext", "Home Computer (owner "..
+			meta:get_string("owner")..")")
+			local inv = meta:get_inventory()
+			inv:set_size("main", 4*2)
+			timer:start(40)
+		end
 	end,
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
@@ -191,24 +229,37 @@ minetest.register_node("mycoins:home_computer_active",{
 	sounds = default.node_sound_wood_defaults(),
 	
 	on_timer = function(pos)
-	local meta = minetest.get_meta(pos)
-	if ( minetest.get_player_by_name(meta:get_string("owner")) == nil ) then
-		local timer = minetest.get_node_timer(pos)
 		local meta = minetest.get_meta(pos)
-		local node = minetest.get_node(pos)
-		minetest.swap_node(pos, {name = 'mycoins:home_computer', param2 = node.param2})
-		meta:set_string("formspec", default.computer_off_formspec(pos))
-		meta:set_string("infotext", "Home Computer (owner "..
-		meta:get_string("owner")..")")
-		local inv = meta:get_inventory()
-		inv:set_size("main", 4*2)
-		timer:stop()
-	else
-		local timer = minetest.get_node_timer(pos)
-		minetest.get_meta(pos):get_inventory():add_item("main", "mycoins:bitcent")
-		timer:start(1300)
-	end
-		
+		if ( minetest.get_player_by_name(meta:get_string("owner")) == nil ) then
+			local timer = minetest.get_node_timer(pos)
+			local meta = minetest.get_meta(pos)
+			local node = minetest.get_node(pos)
+			minetest.swap_node(pos, {name = 'mycoins:home_computer', param2 = node.param2})
+			meta:set_string("formspec", default.computer_off_formspec(pos))
+			meta:set_string("infotext", "Home Computer (owner "..
+			meta:get_string("owner")..")")
+			local inv = meta:get_inventory()
+			inv:set_size("main", 4*2)
+			timer:stop()
+		else
+			local wifi = minetest.find_node_near(pos, 30, {"mycoins:router_on"})
+			if wifi == nil then
+				local timer = minetest.get_node_timer(pos)
+				local meta = minetest.get_meta(pos)
+				local node = minetest.get_node(pos)
+				minetest.swap_node(pos, {name = 'mycoins:home_computer', param2 = node.param2})
+				meta:set_string("formspec", default.computer_wifi_formspec(pos))
+				meta:set_string("infotext", "Home Computer (owner "..
+				meta:get_string("owner")..")")
+				local inv = meta:get_inventory()
+				inv:set_size("main", 4*2)
+				timer:stop()
+			else
+				local timer = minetest.get_node_timer(pos)
+				minetest.get_meta(pos):get_inventory():add_item("main", "mycoins:bitcent")
+				timer:start(600)
+			end
+		end
 	end,
 	on_punch = function(pos)
 	local timer = minetest.get_node_timer(pos)
@@ -320,41 +371,69 @@ minetest.register_node("mycoins:game_computer",{
 		return computer_owner(meta, player)
 	end,
 	on_timer = function(pos)
-	local meta = minetest.get_meta(pos)
-	if ( minetest.get_player_by_name(meta:get_string("owner")) == nil ) then
-		local timer = minetest.get_node_timer(pos)
-		local meta = minetest.get_meta(pos)
-		local node = minetest.get_node(pos)
-		minetest.swap_node(pos, {name = 'mycoins:game_computer', param2 = node.param2})
-		meta:set_string("formspec", default.computer_off_formspec(pos))
-		meta:set_string("infotext", "Game Computer (owner "..
-		meta:get_string("owner")..")")
-		local inv = meta:get_inventory()
-		inv:set_size("main", 4*2)
-		timer:stop()
-	else
-		local timer = minetest.get_node_timer(pos)
-		local meta = minetest.get_meta(pos)
-		local node = minetest.get_node(pos)
-		minetest.swap_node(pos, {name = 'mycoins:game_computer_active', param2 = node.param2})
-		meta:set_string("formspec", default.active_computer_formspec(pos))
-		meta:set_string("infotext", "Game Computer (owner "..
-		meta:get_string("owner")..")")
-		local inv = meta:get_inventory()
-		inv:set_size("main", 4*2)
-		timer:start(800)
-	end	
+		local wifi = minetest.find_node_near(pos, 30, {"mycoins:router_on"})
+		if wifi == nil then
+			local timer = minetest.get_node_timer(pos)
+			local meta = minetest.get_meta(pos)
+			local node = minetest.get_node(pos)
+			minetest.swap_node(pos, {name = 'mycoins:game_computer', param2 = node.param2})
+			meta:set_string("formspec", default.computer_wifi_formspec(pos))
+			meta:set_string("infotext", "Game Computer (owner "..
+			meta:get_string("owner")..")")
+			local inv = meta:get_inventory()
+			inv:set_size("main", 4*2)
+			timer:stop()
+		else
+			local meta = minetest.get_meta(pos)
+			if ( minetest.get_player_by_name(meta:get_string("owner")) == nil ) then
+				local timer = minetest.get_node_timer(pos)
+				local meta = minetest.get_meta(pos)
+				local node = minetest.get_node(pos)
+				minetest.swap_node(pos, {name = 'mycoins:game_computer', param2 = node.param2})
+				meta:set_string("formspec", default.computer_off_formspec(pos))
+				meta:set_string("infotext", "Game Computer (owner "..
+				meta:get_string("owner")..")")
+				local inv = meta:get_inventory()
+				inv:set_size("main", 4*2)
+				timer:stop()
+			else
+				local timer = minetest.get_node_timer(pos)
+				local meta = minetest.get_meta(pos)
+				local node = minetest.get_node(pos)
+				minetest.swap_node(pos, {name = 'mycoins:game_computer_active', param2 = node.param2})
+				meta:set_string("formspec", default.active_computer_formspec(pos))
+				meta:set_string("infotext", "Game Computer (owner "..
+				meta:get_string("owner")..")")
+				local inv = meta:get_inventory()
+				inv:set_size("main", 4*2)
+				timer:start(600)
+			end
+		end
 	end,
 	on_punch = function(pos)
-	local timer = minetest.get_node_timer(pos)
-		local meta = minetest.get_meta(pos)
-		local node = minetest.get_node(pos)
-		meta:set_string("formspec", default.computer_formspec(pos))
-		meta:set_string("infotext", "Game Computer (owner "..
-		meta:get_string("owner")..")")
-		local inv = meta:get_inventory()
-		inv:set_size("main", 4*2)
-		timer:start(50)
+		local wifi = minetest.find_node_near(pos, 30, {"mycoins:router_on"})
+		if wifi == nil then
+			local timer = minetest.get_node_timer(pos)
+			local meta = minetest.get_meta(pos)
+			local node = minetest.get_node(pos)
+			minetest.swap_node(pos, {name = 'mycoins:game_computer', param2 = node.param2})
+			meta:set_string("formspec", default.computer_wifi_formspec(pos))
+			meta:set_string("infotext", "Game Computer (owner "..
+			meta:get_string("owner")..")")
+			local inv = meta:get_inventory()
+			inv:set_size("main", 4*2)
+			timer:stop()
+		else
+			local timer = minetest.get_node_timer(pos)
+			local meta = minetest.get_meta(pos)
+			local node = minetest.get_node(pos)
+			meta:set_string("formspec", default.computer_formspec(pos))
+			meta:set_string("infotext", "Game Computer (owner "..
+			meta:get_string("owner")..")")
+			local inv = meta:get_inventory()
+			inv:set_size("main", 4*2)
+			timer:start(40)
+		end
 	end,
 	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
 		local meta = minetest.get_meta(pos)
@@ -434,25 +513,38 @@ minetest.register_node("mycoins:game_computer_active",{
 		return inv:is_empty("main") and computer_owner(meta, player)
 	end,
 	on_timer = function(pos)
-	local meta = minetest.get_meta(pos)
-	if ( minetest.get_player_by_name(meta:get_string("owner")) == nil ) then
-		local timer = minetest.get_node_timer(pos)
 		local meta = minetest.get_meta(pos)
-		local node = minetest.get_node(pos)
-		minetest.swap_node(pos, {name = 'mycoins:game_computer', param2 = node.param2})
-		meta:set_string("formspec", default.computer_off_formspec(pos))
-		meta:set_string("infotext", "Game Computer (owner "..
-		meta:get_string("owner")..")")
-		local inv = meta:get_inventory()
-		inv:set_size("main", 4*2)
-		timer:stop()
-	else
-		local timer = minetest.get_node_timer(pos)
-		minetest.get_meta(pos):get_inventory():add_item("main", "mycoins:bitcent")
-		timer:start(800)
-	end
-		
-	end,
+		if ( minetest.get_player_by_name(meta:get_string("owner")) == nil ) then
+			local timer = minetest.get_node_timer(pos)
+			local meta = minetest.get_meta(pos)
+			local node = minetest.get_node(pos)
+			minetest.swap_node(pos, {name = 'mycoins:game_computer', param2 = node.param2})
+			meta:set_string("formspec", default.computer_off_formspec(pos))
+			meta:set_string("infotext", "Game Computer (owner "..
+			meta:get_string("owner")..")")
+			local inv = meta:get_inventory()
+			inv:set_size("main", 4*2)
+			timer:stop()
+		else
+			local wifi = minetest.find_node_near(pos, 30, {"mycoins:router_on"})
+			if wifi == nil then
+				local timer = minetest.get_node_timer(pos)
+				local meta = minetest.get_meta(pos)
+				local node = minetest.get_node(pos)
+				minetest.swap_node(pos, {name = 'mycoins:game_computer', param2 = node.param2})
+				meta:set_string("formspec", default.computer_wifi_formspec(pos))
+				meta:set_string("infotext", "Game Computer (owner "..
+				meta:get_string("owner")..")")
+				local inv = meta:get_inventory()
+				inv:set_size("main", 4*2)
+				timer:stop()
+			else
+				local timer = minetest.get_node_timer(pos)
+				minetest.get_meta(pos):get_inventory():add_item("main", "mycoins:bitcent")
+				timer:start(600)
+			end
+		end
+	end,	
 	on_punch = function(pos)
 	local timer = minetest.get_node_timer(pos)
 		local meta = minetest.get_meta(pos)
@@ -559,41 +651,69 @@ minetest.register_node("mycoins:alien_computer",{
 		return computer_owner(meta, player)
 	end,
 	on_timer = function(pos)
-	local meta = minetest.get_meta(pos)
-	if ( minetest.get_player_by_name(meta:get_string("owner")) == nil ) then
-		local timer = minetest.get_node_timer(pos)
-		local meta = minetest.get_meta(pos)
-		local node = minetest.get_node(pos)
-		minetest.swap_node(pos, {name = 'mycoins:alien_computer', param2 = node.param2})
-		meta:set_string("formspec", default.computer_off_formspec(pos))
-		meta:set_string("infotext", "Alienware Computer (owner "..
-		meta:get_string("owner")..")")
-		local inv = meta:get_inventory()
-		inv:set_size("main", 4*2)
-		timer:stop()
-	else
-		local timer = minetest.get_node_timer(pos)
-		local meta = minetest.get_meta(pos)
-		local node = minetest.get_node(pos)
-		minetest.swap_node(pos, {name = 'mycoins:alien_computer_active', param2 = node.param2})
-		meta:set_string("formspec", default.active_computer_formspec(pos))
-		meta:set_string("infotext", "Alienware Computer (owner "..
-		meta:get_string("owner")..")")
-		local inv = meta:get_inventory()
-		inv:set_size("main", 4*2)
-		timer:start(600)
-	end
+		local wifi = minetest.find_node_near(pos, 30, {"mycoins:router_on"})
+		if wifi == nil then
+			local timer = minetest.get_node_timer(pos)
+			local meta = minetest.get_meta(pos)
+			local node = minetest.get_node(pos)
+			minetest.swap_node(pos, {name = 'mycoins:alien_computer', param2 = node.param2})
+			meta:set_string("formspec", default.computer_wifi_formspec(pos))
+			meta:set_string("infotext", "Alienware Computer (owner "..
+			meta:get_string("owner")..")")
+			local inv = meta:get_inventory()
+			inv:set_size("main", 4*2)
+			timer:stop()
+		else
+			local meta = minetest.get_meta(pos)
+			if ( minetest.get_player_by_name(meta:get_string("owner")) == nil ) then
+				local timer = minetest.get_node_timer(pos)
+				local meta = minetest.get_meta(pos)
+				local node = minetest.get_node(pos)
+				minetest.swap_node(pos, {name = 'mycoins:alien_computer', param2 = node.param2})
+				meta:set_string("formspec", default.computer_off_formspec(pos))
+				meta:set_string("infotext", "Alienware Computer (owner "..
+				meta:get_string("owner")..")")
+				local inv = meta:get_inventory()
+				inv:set_size("main", 4*2)
+				timer:stop()
+			else
+				local timer = minetest.get_node_timer(pos)
+				local meta = minetest.get_meta(pos)
+				local node = minetest.get_node(pos)
+				minetest.swap_node(pos, {name = 'mycoins:alien_computer_active', param2 = node.param2})
+				meta:set_string("formspec", default.active_computer_formspec(pos))
+				meta:set_string("infotext", "Alienware Computer (owner "..
+				meta:get_string("owner")..")")
+				local inv = meta:get_inventory()
+				inv:set_size("main", 4*2)
+				timer:start(600)
+			end
+		end
 	end,
 	on_punch = function(pos)
-	local timer = minetest.get_node_timer(pos)
-		local meta = minetest.get_meta(pos)
-		local node = minetest.get_node(pos)
-		meta:set_string("formspec", default.computer_formspec(pos))
-		meta:set_string("infotext", "Alienware Computer (owner "..
-		meta:get_string("owner")..")")
-		local inv = meta:get_inventory()
-		inv:set_size("main", 4*2)
-		timer:start(40)
+		local wifi = minetest.find_node_near(pos, 30, {"mycoins:router_on"})
+		if wifi == nil then
+			local timer = minetest.get_node_timer(pos)
+			local meta = minetest.get_meta(pos)
+			local node = minetest.get_node(pos)
+			minetest.swap_node(pos, {name = 'mycoins:alien_computer', param2 = node.param2})
+			meta:set_string("formspec", default.computer_wifi_formspec(pos))
+			meta:set_string("infotext", "Alienware Computer (owner "..
+			meta:get_string("owner")..")")
+			local inv = meta:get_inventory()
+			inv:set_size("main", 4*2)
+			timer:stop()
+		else
+			local timer = minetest.get_node_timer(pos)
+			local meta = minetest.get_meta(pos)
+			local node = minetest.get_node(pos)
+			meta:set_string("formspec", default.computer_formspec(pos))
+			meta:set_string("infotext", "Alienware Computer (owner "..
+			meta:get_string("owner")..")")
+			local inv = meta:get_inventory()
+			inv:set_size("main", 4*2)
+			timer:start(40)
+		end
 	end,
 	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
 		local meta = minetest.get_meta(pos)
@@ -667,39 +787,50 @@ minetest.register_node("mycoins:alien_computer_active",{
 	},
 	
 	sounds = default.node_sound_wood_defaults(),
-	
-	
 	on_timer = function(pos)
-	local meta = minetest.get_meta(pos)
-	if ( minetest.get_player_by_name(meta:get_string("owner")) == nil ) then
-		local timer = minetest.get_node_timer(pos)
 		local meta = minetest.get_meta(pos)
-		local node = minetest.get_node(pos)
-		minetest.swap_node(pos, {name = 'mycoins:alien_computer', param2 = node.param2})
-		meta:set_string("formspec", default.computer_off_formspec(pos))
-		meta:set_string("infotext", "Alienware Computer (owner "..
-		meta:get_string("owner")..")")
-		local inv = meta:get_inventory()
-		inv:set_size("main", 4*2)
-		timer:stop()
-	else
-		local timer = minetest.get_node_timer(pos)
-		minetest.get_meta(pos):get_inventory():add_item("main", "mycoins:bitcent")
-		timer:start(600)
-	end
-		
+		if ( minetest.get_player_by_name(meta:get_string("owner")) == nil ) then
+			local timer = minetest.get_node_timer(pos)
+			local meta = minetest.get_meta(pos)
+			local node = minetest.get_node(pos)
+			minetest.swap_node(pos, {name = 'mycoins:alien_computer', param2 = node.param2})
+			meta:set_string("formspec", default.computer_off_formspec(pos))
+			meta:set_string("infotext", "Alienware Computer (owner "..
+			meta:get_string("owner")..")")
+			local inv = meta:get_inventory()
+			inv:set_size("main", 4*2)
+			timer:stop()
+		else
+			local wifi = minetest.find_node_near(pos, 30, {"mycoins:router_on"})
+			if wifi == nil then
+				local timer = minetest.get_node_timer(pos)
+				local meta = minetest.get_meta(pos)
+				local node = minetest.get_node(pos)
+				minetest.swap_node(pos, {name = 'mycoins:alien_computer', param2 = node.param2})
+				meta:set_string("formspec", default.computer_wifi_formspec(pos))
+				meta:set_string("infotext", "Alienware Computer (owner "..
+				meta:get_string("owner")..")")
+				local inv = meta:get_inventory()
+				inv:set_size("main", 4*2)
+				timer:stop()
+			else
+				local timer = minetest.get_node_timer(pos)
+				minetest.get_meta(pos):get_inventory():add_item("main", "mycoins:bitcent")
+				timer:start(600)
+			end
+		end
 	end,	
 	on_punch = function(pos)
-	local timer = minetest.get_node_timer(pos)
-		local meta = minetest.get_meta(pos)
-		local node = minetest.get_node(pos)
-		minetest.swap_node(pos, {name = 'mycoins:alien_computer', param2 = node.param2})
-		meta:set_string("formspec", default.computer_off_formspec(pos))
-		meta:set_string("infotext", "Alienware Computer (owner "..
-		meta:get_string("owner")..")")
-		local inv = meta:get_inventory()
-		inv:set_size("main", 4*2)
-		timer:stop()
+			local timer = minetest.get_node_timer(pos)
+			local meta = minetest.get_meta(pos)
+			local node = minetest.get_node(pos)
+			minetest.swap_node(pos, {name = 'mycoins:alien_computer', param2 = node.param2})
+			meta:set_string("formspec", default.computer_off_formspec(pos))
+			meta:set_string("infotext", "Alienware Computer (owner "..
+			meta:get_string("owner")..")")
+			local inv = meta:get_inventory()
+			inv:set_size("main", 4*2)
+			timer:stop()
 	end,
 	can_dig = function(pos,player)
 		local meta = minetest.get_meta(pos);
