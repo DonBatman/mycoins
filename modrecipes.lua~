@@ -29,7 +29,7 @@ if ( minetest.get_modpath("homedecor") ) == nil then
 		output = "homedecor:ic 4",
 		recipe = {
 			{ "mesecons_materials:silicon", "mesecons_materials:silicon" },
-			{ "mesecons_materials:silicon", "mycoins:copper_ribbonwire" },
+			{ "mesecons_materials:silicon", "default:copper_ingot" },
 		},
 	})
 

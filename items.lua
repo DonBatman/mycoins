@@ -44,11 +44,29 @@ minetest.register_craftitem( "mycoins:home_computer_video", {
 	on_place_on_ground = minetest.craftitem_place_item,
 })
 
-minetest.register_craftitem( "mycoins:home_computer_motherboard", {
+minetest.register_node("mycoins:home_computer_motherboard", {
 	description = "Home Computer Motherboard",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	drop = "mycoins:home_computer_motherboard",
+	groups = {cracky=2, oddly_breakable_by_hand=2},
 	stack_max = 1,
 	inventory_image = "mycoins_home_computer_motherboard.png",
-	on_place_on_ground = minetest.craftitem_place_item,
+	tiles = {
+		"mycoins_home_computer_motherboard.png",
+		"grn.png",
+		"grn.png",
+		"grn.png",
+		"grn.png",
+		"grn.png"
+	},
+	drawtype = "nodebox",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.4375, -0.5, -0.4375, 0.4375, -0.4375, 0.4375}, -- NodeBox1
+		}
+	}
 })
 
 minetest.register_craftitem( "mycoins:home_computer_powersupply", {
@@ -109,12 +127,31 @@ minetest.register_craftitem( "mycoins:game_computer_video", {
 	on_place_on_ground = minetest.craftitem_place_item,
 })
 
-minetest.register_craftitem( "mycoins:game_computer_motherboard", {
+minetest.register_node("mycoins:game_computer_motherboard", {
 	description = "Gaming Computer Motherboard",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	drop = "mycoins:game_computer_motherboard",
+	groups = {cracky=2, oddly_breakable_by_hand=2},
 	stack_max = 1,
 	inventory_image = "mycoins_game_computer_motherboard.png",
-	on_place_on_ground = minetest.craftitem_place_item,
+	tiles = {
+		"mycoins_game_computer_motherboard.png",
+		"grn.png",
+		"grn.png",
+		"grn.png",
+		"grn.png",
+		"grn.png"
+	},
+	drawtype = "nodebox",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.5, -0.5, -0.5, 0.5, -0.4375, 0.5}, -- NodeBox1
+		}
+	}
 })
+
 
 minetest.register_craftitem( "mycoins:game_computer_powersupply", {
 	description = "Gaming Computer Power Supply",
@@ -167,12 +204,37 @@ minetest.register_craftitem( "mycoins:alien_computer_video", {
 	on_place_on_ground = minetest.craftitem_place_item,
 })
 
-minetest.register_craftitem( "mycoins:alien_computer_motherboard", {
+
+
+minetest.register_node("mycoins:alien_computer_motherboard", {
 	description = "Alienware Motherboard",
+	paramtype = "light",
+	paramtype2 = "facedir",
+	drop = "mycoins:alien_computer_motherboard",
+	groups = {cracky=2, oddly_breakable_by_hand=2},
 	stack_max = 1,
 	inventory_image = "mycoins_alien_computer_motherboard.png",
-	on_place_on_ground = minetest.craftitem_place_item,
+	tiles = {
+		"mycoins_alien_computer_motherboard.png",
+		"blk.png",
+		"blk.png",
+		"blk.png",
+		"blk.png",
+		"blk.png"
+	},
+	drawtype = "nodebox",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.5, -0.5, -0.5, 0.5, -0.4375, 0.5}, -- NodeBox1
+		}
+	}
 })
+
+
+
+
+
 
 minetest.register_craftitem( "mycoins:alien_computer_powersupply", {
 	description = "Alienware Power Supply",
@@ -216,6 +278,20 @@ minetest.register_craftitem( "mycoins:alien_computer_cooler", {
 	on_place_on_ground = minetest.craftitem_place_item,
 })
 
+minetest.register_craftitem( "mycoins:copper_ribbonwire", {
+	description = "Bare Copper Ribbon Wire",
+	stack_max = 99,
+	inventory_image = "mycoins_copper_ribbonwire.png",
+	on_place_on_ground = minetest.craftitem_place_item,
+})
+
+minetest.register_craftitem( "mycoins:ribbonwire", {
+	description = "Insulated Ribbon Wire",
+	stack_max = 99,
+	inventory_image = "mycoins_ribbonwire.png",
+	on_place_on_ground = minetest.craftitem_place_item,
+})
+
 minetest.override_item("default:stone",{
     drop = {
         min_items = 1,
@@ -232,4 +308,5 @@ minetest.override_item("default:stone",{
         }
     }
 })
+
 

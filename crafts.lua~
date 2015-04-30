@@ -35,7 +35,7 @@ minetest.register_craft({
 minetest.register_craft({
     output = "mycoins:home_computer_powersupply";
     recipe = {
-        { "mycoins:ribbonwire", "mycoins:ribbonwire", "mycoins:ribbonwire", },
+        { "mycoins:copper_ribbonwire", "mycoins:copper_ribbonwire", "mycoins:copper_ribbonwire", },
         { "default:steel_ingot", "default:steelblock", "default:steel_ingot", },
         { "homedecor:ic", "homedecor:ic", "homedecor:ic", },
     };
