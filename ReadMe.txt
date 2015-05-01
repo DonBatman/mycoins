@@ -34,6 +34,8 @@ of Minetest, improved code and added more visual feedback.
 player now must punch computer to reboot and mine coins again. MilesDyson
 04/28/15 added router that can turn on and off, computers now require a router to be within 30 node radius
 in order to mine bitcoins.
-04/29/15 added forspec to router to show network information..
+04/29/15 added form spec to router to show network information..
+04/30/15 made a few items into nodes to place as deco.. added isp box for router to work..
+plan to add a pay system for internet. animated the isp box like the router.
 
 Enjoy!! :D

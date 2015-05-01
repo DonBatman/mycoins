@@ -10,9 +10,19 @@ function default.isp_off_formspec(pos)
 end
 
 function default.isp_on_formspec(pos)
+	local active_computers = minetest.find_nodes_in_area({x=pos.x-30, y=pos.y-30, z=pos.z-30}, {x=pos.x+30, y=pos.y+30, z=pos.z+30}, {"mycoins:home_computer_active","mycoins:game_computer_active","mycoins:alien_computer_active"})
+	local inactive_computers = minetest.find_nodes_in_area({x=pos.x-30, y=pos.y-30, z=pos.z-30}, {x=pos.x+30, y=pos.y+30, z=pos.z+30}, {"mycoins:home_computer","mycoins:game_computer","mycoins:alien_computer"})
+	local active_routers = minetest.find_nodes_in_area({x=pos.x-30, y=pos.y-30, z=pos.z-30}, {x=pos.x+30, y=pos.y+30, z=pos.z+30}, {"mycoins:router_on"})
+	local inactive_routers = minetest.find_nodes_in_area({x=pos.x-30, y=pos.y-30, z=pos.z-30}, {x=pos.x+30, y=pos.y+30, z=pos.z+30}, {"mycoins:router"})
 	local spos = pos.x .. "," .. pos.y .. "," ..pos.z
 	local formspec = "size[10,10]"..
-		"label[2,2;Powered On...]"..
+		"label[1,0;Powered On...]"..
+		"label[2,0.6;Computers:]"..
+		"label[2,0.8;Active: "..#active_computers.."]"..
+		"label[2,1;Inactive: "..#inactive_computers.."]"..
+		"label[4,0.6;Routers:]"..
+		"label[4,0.8;Active: "..#active_routers.."]"..
+		"label[4,1;Inactive: "..#inactive_routers.."]"..
 		"label[1,2.6;Payment:]"..
 		"list[nodemeta:".. spos .. ";main;1,3;1,1;]"..
 		"list[current_player;main;1,6;8,4;]"..
@@ -85,8 +95,7 @@ minetest.register_node("mycoins:isp_on", {
 		"mycoins_isp_rt.png",
 		"mycoins_isp_lt.png",
 		"mycoins_isp_bk.png",
-		"mycoins_isp_ft.png"
-	},
+		{name="mycoins_isp_f_animated.png", animation={type="vertical_frames", aspect_w=32, aspect_h=32, length=1.0}},}, --"mycoins_isp_f.png"},
 	paramtype = "light",
 	paramtype2 = "facedir",
 	walkable = false,

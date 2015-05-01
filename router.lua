@@ -8,11 +8,17 @@ end
 function default.router_formspec(pos)
 	local active_computers = minetest.find_nodes_in_area({x=pos.x-30, y=pos.y-30, z=pos.z-30}, {x=pos.x+30, y=pos.y+30, z=pos.z+30}, {"mycoins:home_computer_active","mycoins:game_computer_active","mycoins:alien_computer_active"})
 	local inactive_computers = minetest.find_nodes_in_area({x=pos.x-30, y=pos.y-30, z=pos.z-30}, {x=pos.x+30, y=pos.y+30, z=pos.z+30}, {"mycoins:home_computer","mycoins:game_computer","mycoins:alien_computer"})
+	local active_isp = minetest.find_nodes_in_area({x=pos.x-30, y=pos.y-30, z=pos.z-30}, {x=pos.x+30, y=pos.y+30, z=pos.z+30}, {"mycoins:isp_on"})
+	local inactive_isp = minetest.find_nodes_in_area({x=pos.x-30, y=pos.y-30, z=pos.z-30}, {x=pos.x+30, y=pos.y+30, z=pos.z+30}, {"mycoins:isp"})
 	local spos = pos.x .. "," .. pos.y .. "," ..pos.z
 	local formspec = "size[10,10]"..
-		"label[2,2;Powered On...]"..
-		"label[2,2.5;Active: "..#active_computers.."]"..
-		"label[2,2.8;Inactive: "..#inactive_computers.."]"..
+		"label[1,0;Powered On...]"..
+		"label[2,0.6;Computers:]"..
+		"label[2,0.8;Active: "..#active_computers.."]"..
+		"label[2,1;Inactive: "..#inactive_computers.."]"..
+		"label[4,0.6;ISP:]"..
+		"label[4,0.8;Active: "..#active_isp.."]"..
+		"label[4,1;Inactive: "..#inactive_isp.."]"..
 		"button_exit[4,7;2,1;exit;Exit]"
 	return formspec
 end
