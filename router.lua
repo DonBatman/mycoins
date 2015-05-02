@@ -38,6 +38,13 @@ function default.find_network(pos)
 	inactive_isp = minetest.find_nodes_in_area({x=pos.x-30, y=pos.y-30, z=pos.z-30}, {x=pos.x+30, y=pos.y+30, z=pos.z+30}, {"mycoins:isp"})
 end
 
+local function router_owner(meta, player)
+	if player:get_player_name() ~= meta:get_string("owner") then
+		return false
+	end
+	return true
+end
+
 --WIFI Router
 minetest.register_node("mycoins:router_on", {
 	description = "WIFI Router",
@@ -116,7 +123,7 @@ minetest.register_node("mycoins:router_on", {
 	end,
 	can_dig = function(pos, player)
 		local meta = minetest.get_meta(pos);
-		return isp_owner(meta, player)
+		return router_owner(meta, player)
 	end,
 })
 
@@ -199,7 +206,7 @@ minetest.register_node("mycoins:router", {
 	end,
 	can_dig = function(pos, player)
 		local meta = minetest.get_meta(pos);
-		return isp_owner(meta, player)
+		return router_owner(meta, player)
 	end,
 })
 
@@ -272,7 +279,7 @@ minetest.register_node("mycoins:router_error", {
 	end,
 	can_dig = function(pos, player)
 		local meta = minetest.get_meta(pos);
-		return isp_owner(meta, player)
+		return router_owner(meta, player)
 	end,
 })
 

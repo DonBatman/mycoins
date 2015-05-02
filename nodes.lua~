@@ -1,3 +1,10 @@
+home_boot = 60
+home_miner = 500
+game_boot = 45
+game_miner = 400
+alien_boot = 30
+alien_miner = 300
+
 
 local function computer_owner(meta, player)
 	if player:get_player_name() ~= meta:get_string("owner") then
@@ -16,8 +23,8 @@ function default.computer_formspec(pos)
 		"label[2,1.7;Setting up console						... OK]" ..
 		"label[2,2;Operaing System Loaded					... OK]" ..
 		"label[2,2.3;Starting cgminer 3.7.2 ]" ..
-		"list[nodemeta:".. spos .. ";main;1,3;8,1;]"..
-		"list[current_player;main;1,6;8,4;]"
+		"list[nodemeta:".. spos .. ";main;1,3;1,1;]"..
+		"list[current_player;main;3,9.5;4,1;]"
 	return formspec
 end
 
@@ -25,14 +32,15 @@ function default.computer_off_formspec(pos)
 	local spos = pos.x .. "," .. pos.y .. "," ..pos.z
 	local formspec = "size[10,10]"..
 		"label[2,2;Powered Off...]" ..
-		"list[nodemeta:".. spos .. ";main;1,3;8,1;]"..
-		"list[current_player;main;1,6;8,4;]"
+		"list[nodemeta:".. spos .. ";main;1,3;1,1;]"..
+		"list[current_player;main;3,9.5;4,1;]"
 	return formspec
 end
  
 function default.active_computer_formspec(pos)
 	local spos = pos.x .. "," .. pos.y .. "," ..pos.z
 	local formspec = "size[10,10]"..
+		"background[1,2.5;8,7.8;mycoins_game_computer_motherboard.png]"..
 		"label[2,0.0;cgminer version 3.7.2 - Started]" ..
 		"label[2,0.2;----------------------------------------------------------------------------------]" ..
 		"label[2,0.4;5s:468.9K avg:468.8Kh/s : A:2304 R:0 HW:0 WU:394.4/m]" ..
@@ -40,8 +48,8 @@ function default.active_computer_formspec(pos)
 		"label[2,1;Connected to stratum.max.bitcoin.com diff 1.02k with stratum.]" ..
 		"label[2,1.3;Block: 31dca6d... Diff:104 Started: 09:24:05 Best share: 618K.]" ..
 		"label[2,1.5;----------------------------------------------------------------------------------]" ..
-		"list[nodemeta:".. spos .. ";main;1,3;8,1;]"..
-		"list[current_player;main;1,6;8,4;]"
+		"list[nodemeta:".. spos .. ";main;1,3;1,1;]"..
+		"list[current_player;main;3,9.5;4,1;]"
 	return formspec
 end
  
@@ -50,8 +58,8 @@ function default.computer_wifi_formspec(pos)
 	local formspec = "size[10,10]"..
 		"label[2,2;No Internet Connection.]" ..
 		"label[2,2.5;Contact Your Network Administrator For More Information.]" ..
-		"list[nodemeta:".. spos .. ";main;1,3;8,1;]"..
-		"list[current_player;main;1,6;8,4;]"
+		"list[nodemeta:".. spos .. ";main;1,3;1,1;]"..
+		"list[current_player;main;3,9.5;4,1;]"
 	return formspec
 end
 
@@ -79,7 +87,7 @@ minetest.register_node("mycoins:home_computer",{
 		meta:set_string("owner", placer:get_player_name() or "")
 		meta:set_string("infotext", "Home Computer (owner "..
 		meta:get_string("owner")..")")
-		timer:start(60)
+		timer:start(home_boot)
 		end,
 	on_timer = function(pos)
 		local isp = minetest.find_node_near(pos, 3, {"mycoins:isp_on"})
@@ -119,7 +127,7 @@ minetest.register_node("mycoins:home_computer",{
 					meta:get_string("owner")..")")
 					local inv = meta:get_inventory()
 					inv:set_size("main", 4*2)
-					timer:start(500)
+					timer:start(home_miner)
 				end
 			end
 		else
@@ -145,7 +153,7 @@ minetest.register_node("mycoins:home_computer",{
 					meta:get_string("owner")..")")
 					local inv = meta:get_inventory()
 					inv:set_size("main", 4*2)
-					timer:start(500)
+					timer:start(home_miner)
 				end
 
 		end
@@ -174,7 +182,7 @@ minetest.register_node("mycoins:home_computer",{
 			meta:get_string("owner")..")")
 			local inv = meta:get_inventory()
 			inv:set_size("main", 4*2)
-			timer:start(60)
+			timer:start(home_boot)
 		end
 		else
 			local timer = minetest.get_node_timer(pos)
@@ -185,7 +193,7 @@ minetest.register_node("mycoins:home_computer",{
 			meta:get_string("owner")..")")
 			local inv = meta:get_inventory()
 			inv:set_size("main", 4*2)
-			timer:start(60)
+			timer:start(home_boot)
 		end
 	end,
 	on_construct = function(pos)
@@ -203,10 +211,6 @@ minetest.register_node("mycoins:home_computer",{
 	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
 		local meta = minetest.get_meta(pos)
 		if not computer_owner(meta, player) then
-			minetest.log("action", player:get_player_name()..
-					" tried to access a home computer belonging to "..
-					meta:get_string("owner").." at "..
-					minetest.pos_to_string(pos))
 			return 0
 		end
 		return count
@@ -217,10 +221,6 @@ minetest.register_node("mycoins:home_computer",{
     allow_metadata_inventory_take = function(pos, listname, index, stack, player)
 		local meta = minetest.get_meta(pos)
 		if not computer_owner(meta, player) then
-			minetest.log("action", player:get_player_name()..
-					" tried to access a home computer belonging to "..
-					meta:get_string("owner").." at "..
-					minetest.pos_to_string(pos))
 			return 0
 		end
 		return stack:get_count()
@@ -276,7 +276,7 @@ minetest.register_node("mycoins:home_computer_active",{
 				else
 					local timer = minetest.get_node_timer(pos)
 					minetest.get_meta(pos):get_inventory():add_item("main", "mycoins:bitcent")
-					timer:start(500)
+					timer:start(home_miner)
 				end
 			end
 		else
@@ -295,7 +295,7 @@ minetest.register_node("mycoins:home_computer_active",{
 			else
 				local timer = minetest.get_node_timer(pos)
 				minetest.get_meta(pos):get_inventory():add_item("main", "mycoins:bitcent")
-				timer:start(500)
+				timer:start(home_miner)
 			end
 		end
 	end,
@@ -319,10 +319,6 @@ minetest.register_node("mycoins:home_computer_active",{
 	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
 		local meta = minetest.get_meta(pos)
 		if not computer_owner(meta, player) then
-			minetest.log("action", player:get_player_name()..
-					" tried to access a home computer belonging to "..
-					meta:get_string("owner").." at "..
-					minetest.pos_to_string(pos))
 			return 0
 		end
 		return count
@@ -333,10 +329,6 @@ minetest.register_node("mycoins:home_computer_active",{
     allow_metadata_inventory_take = function(pos, listname, index, stack, player)
 		local meta = minetest.get_meta(pos)
 		if not computer_owner(meta, player) then
-			minetest.log("action", player:get_player_name()..
-					" tried to access a home computer belonging to "..
-					meta:get_string("owner").." at "..
-					minetest.pos_to_string(pos))
 			return 0
 		end
 		return stack:get_count()
@@ -367,7 +359,7 @@ minetest.register_node("mycoins:game_computer",{
 		meta:set_string("owner", placer:get_player_name() or "")
 		meta:set_string("infotext", "Gaming Computer (owner "..
 		meta:get_string("owner")..")")
-		timer:start(45)
+		timer:start(game_boot)
 	end,
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
@@ -420,7 +412,7 @@ minetest.register_node("mycoins:game_computer",{
 					meta:get_string("owner")..")")
 					local inv = meta:get_inventory()
 					inv:set_size("main", 4*2)
-					timer:start(400)
+					timer:start(game_miner)
 				end
 			end
 		else
@@ -446,7 +438,7 @@ minetest.register_node("mycoins:game_computer",{
 				meta:get_string("owner")..")")
 				local inv = meta:get_inventory()
 				inv:set_size("main", 4*2)
-				timer:start(400)
+				timer:start(game_miner)
 			end
 		end
 	end,
@@ -474,7 +466,7 @@ minetest.register_node("mycoins:game_computer",{
 				meta:get_string("owner")..")")
 				local inv = meta:get_inventory()
 				inv:set_size("main", 4*2)
-				timer:start(45)
+				timer:start(game_boot)
 			end
 		else
 			local timer = minetest.get_node_timer(pos)
@@ -485,16 +477,12 @@ minetest.register_node("mycoins:game_computer",{
 			meta:get_string("owner")..")")
 			local inv = meta:get_inventory()
 			inv:set_size("main", 4*2)
-			timer:start(45)
+			timer:start(game_boot)
 		end
 	end,
 	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
 		local meta = minetest.get_meta(pos)
 		if not computer_owner(meta, player) then
-			minetest.log("action", player:get_player_name()..
-					" tried to access a gaming computer belonging to "..
-					meta:get_string("owner").." at "..
-					minetest.pos_to_string(pos))
 			return 0
 		end
 		return count
@@ -505,10 +493,6 @@ minetest.register_node("mycoins:game_computer",{
     allow_metadata_inventory_take = function(pos, listname, index, stack, player)
 		local meta = minetest.get_meta(pos)
 		if not computer_owner(meta, player) then
-			minetest.log("action", player:get_player_name()..
-					" tried to access a gaming computer belonging to "..
-					meta:get_string("owner").." at "..
-					minetest.pos_to_string(pos))
 			return 0
 		end
 		return stack:get_count()
@@ -569,7 +553,7 @@ minetest.register_node("mycoins:game_computer_active",{
 				else
 					local timer = minetest.get_node_timer(pos)
 					minetest.get_meta(pos):get_inventory():add_item("main", "mycoins:bitcent")
-					timer:start(400)
+					timer:start(game_miner)
 				end
 			end
 		else
@@ -588,7 +572,7 @@ minetest.register_node("mycoins:game_computer_active",{
 			else
 				local timer = minetest.get_node_timer(pos)
 				minetest.get_meta(pos):get_inventory():add_item("main", "mycoins:bitcent")
-				timer:start(400)
+				timer:start(game_miner)
 			end
 		end
 	end,	
@@ -607,10 +591,6 @@ minetest.register_node("mycoins:game_computer_active",{
 	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
 		local meta = minetest.get_meta(pos)
 		if not computer_owner(meta, player) then
-			minetest.log("action", player:get_player_name()..
-					" tried to access a gaming computer belonging to "..
-					meta:get_string("owner").." at "..
-					minetest.pos_to_string(pos))
 			return 0
 		end
 		return count
@@ -621,17 +601,13 @@ minetest.register_node("mycoins:game_computer_active",{
     allow_metadata_inventory_take = function(pos, listname, index, stack, player)
 		local meta = minetest.get_meta(pos)
 		if not computer_owner(meta, player) then
-			minetest.log("action", player:get_player_name()..
-					" tried to access a gaming computer belonging to "..
-					meta:get_string("owner").." at "..
-					minetest.pos_to_string(pos))
 			return 0
 		end
 		return stack:get_count()
 	end,
 })
 
--- Alienware Computer
+
 -- Alienware Computer
 minetest.register_node("mycoins:alien_computer",{
 	drawtype = "nodebox",
@@ -656,7 +632,7 @@ minetest.register_node("mycoins:alien_computer",{
 		meta:set_string("owner", placer:get_player_name() or "")
 		meta:set_string("infotext", "Alienware Computer (owner "..
 		meta:get_string("owner")..")")
-		timer:start(30)
+		timer:start(alien_boot)
 	end,
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
@@ -709,7 +685,7 @@ minetest.register_node("mycoins:alien_computer",{
 					meta:get_string("owner")..")")
 					local inv = meta:get_inventory()
 					inv:set_size("main", 4*2)
-					timer:start(300)
+					timer:start(alien_miner)
 				end
 			end
 		else
@@ -735,7 +711,7 @@ minetest.register_node("mycoins:alien_computer",{
 				meta:get_string("owner")..")")
 				local inv = meta:get_inventory()
 				inv:set_size("main", 4*2)
-				timer:start(300)
+				timer:start(alien_miner)
 			end
 		end
 	end,
@@ -763,7 +739,7 @@ minetest.register_node("mycoins:alien_computer",{
 				meta:get_string("owner")..")")
 				local inv = meta:get_inventory()
 				inv:set_size("main", 4*2)
-				timer:start(30)
+				timer:start(alien_boot)
 			end
 		else
 			local timer = minetest.get_node_timer(pos)
@@ -774,16 +750,12 @@ minetest.register_node("mycoins:alien_computer",{
 			meta:get_string("owner")..")")
 			local inv = meta:get_inventory()
 			inv:set_size("main", 4*2)
-			timer:start(30)
+			timer:start(alien_boot)
 		end
 	end,
 	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
 		local meta = minetest.get_meta(pos)
 		if not computer_owner(meta, player) then
-			minetest.log("action", player:get_player_name()..
-					" tried to access a Alienware computer belonging to "..
-					meta:get_string("owner").." at "..
-					minetest.pos_to_string(pos))
 			return 0
 		end
 		return count
@@ -794,10 +766,6 @@ minetest.register_node("mycoins:alien_computer",{
     allow_metadata_inventory_take = function(pos, listname, index, stack, player)
 		local meta = minetest.get_meta(pos)
 		if not computer_owner(meta, player) then
-			minetest.log("action", player:get_player_name()..
-					" tried to access a Alienware computer belonging to "..
-					meta:get_string("owner").." at "..
-					minetest.pos_to_string(pos))
 			return 0
 		end
 		return stack:get_count()
@@ -858,7 +826,7 @@ minetest.register_node("mycoins:alien_computer_active",{
 				else
 					local timer = minetest.get_node_timer(pos)
 					minetest.get_meta(pos):get_inventory():add_item("main", "mycoins:bitcent")
-					timer:start(300)
+					timer:start(alien_miner)
 				end
 			end
 		else
@@ -877,7 +845,7 @@ minetest.register_node("mycoins:alien_computer_active",{
 			else
 				local timer = minetest.get_node_timer(pos)
 				minetest.get_meta(pos):get_inventory():add_item("main", "mycoins:bitcent")
-				timer:start(300)
+				timer:start(alien_miner)
 			end
 		end
 	end,	
@@ -896,10 +864,6 @@ minetest.register_node("mycoins:alien_computer_active",{
 	allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
 		local meta = minetest.get_meta(pos)
 		if not computer_owner(meta, player) then
-			minetest.log("action", player:get_player_name()..
-					" tried to access a Alienware computer belonging to "..
-					meta:get_string("owner").." at "..
-					minetest.pos_to_string(pos))
 			return 0
 		end
 		return count
@@ -910,10 +874,6 @@ minetest.register_node("mycoins:alien_computer_active",{
     allow_metadata_inventory_take = function(pos, listname, index, stack, player)
 		local meta = minetest.get_meta(pos)
 		if not computer_owner(meta, player) then
-			minetest.log("action", player:get_player_name()..
-					" tried to access a Alienware computer belonging to "..
-					meta:get_string("owner").." at "..
-					minetest.pos_to_string(pos))
 			return 0
 		end
 		return stack:get_count()

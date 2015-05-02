@@ -38,6 +38,13 @@ function default.find_network(pos)
 	inactive_isp = minetest.find_nodes_in_area({x=pos.x-30, y=pos.y-30, z=pos.z-30}, {x=pos.x+30, y=pos.y+30, z=pos.z+30}, {"mycoins:isp"})
 end
 
+local function router_owner(meta, player)
+	if player:get_player_name() ~= meta:get_string("owner") then
+		return false
+	end
+	return true
+end
+
 --WIFI Router
 minetest.register_node("mycoins:router_on", {
 	description = "WIFI Router",
@@ -116,7 +123,7 @@ minetest.register_node("mycoins:router_on", {
 	end,
 	can_dig = function(pos, player)
 		local meta = minetest.get_meta(pos);
-		return isp_owner(meta, player)
+		return router_owner(meta, player)
 	end,
 })
 
@@ -149,7 +156,7 @@ minetest.register_node("mycoins:router", {
 			local node = minetest.get_node(pos)
 			minetest.swap_node(pos, {name = 'mycoins:router_error', param2 = node.param2})
 			meta:set_string("formspec", default.router_error_formspec(pos))
-			meta:set_string("infotext", "Router")
+			meta:set_string("infotext", "Router (owner "..meta:get_string("owner")..")")
 			timer:start(10)
 		else
 			local timer = minetest.get_node_timer(pos)
@@ -157,7 +164,7 @@ minetest.register_node("mycoins:router", {
 			local node = minetest.get_node(pos)
 			minetest.swap_node(pos, {name = 'mycoins:router_on', param2 = node.param2})
 			meta:set_string("formspec", default.router_formspec(pos))
-			meta:set_string("infotext", "Router")
+			meta:set_string("infotext", "Router (owner "..meta:get_string("owner")..")")
 			timer:start(10)
 		end
 	end,
@@ -168,15 +175,16 @@ minetest.register_node("mycoins:router", {
 		local meta = minetest.get_meta(pos)
 		minetest.swap_node(pos, {name = 'mycoins:router', param2 = node.param2})
 		meta:set_string("formspec", default.router_off_formspec(pos))
-		meta:set_string("infotext", "Router")
+		meta:set_string("infotext", "Router (owner "..meta:get_string("owner")..")")
 		timer:stop()
 	end,
-		after_place_node = function(pos)
+	after_place_node = function(pos, placer)
 		local timer = minetest.get_node_timer(pos)
 		local node = minetest.get_node(pos)
 		local meta = minetest.get_meta(pos)
 		meta:set_string("formspec", default.router_formspec(pos))
-		meta:set_string("infotext", "Router")
+		meta:set_string("owner", placer:get_player_name() or "")
+		meta:set_string("infotext", "Router (owner "..meta:get_string("owner")..")")
 		timer:start(10)
 	end,
 	on_construct = function(pos)
@@ -187,14 +195,18 @@ minetest.register_node("mycoins:router", {
 			local meta = minetest.get_meta(pos)
 			minetest.swap_node(pos, {name = 'mycoins:router_error', param2 = node.param2})
 			meta:set_string("formspec", default.router_error_formspec(pos))
-			meta:set_string("infotext", "Router")
+			meta:set_string("infotext", "Router (owner "..meta:get_string("owner")..")")
 		else
 			local node = minetest.get_node(pos)
 			local meta = minetest.get_meta(pos)
 			minetest.swap_node(pos, {name = 'mycoins:router_on', param2 = node.param2})
 			meta:set_string("formspec", default.router_formspec(pos))
-			meta:set_string("infotext", "Router")
+			meta:set_string("infotext", "Router (owner "..meta:get_string("owner")..")")
 		end
+	end,
+	can_dig = function(pos, player)
+		local meta = minetest.get_meta(pos);
+		return isp_owner(meta, player)
 	end,
 })
 
@@ -225,7 +237,7 @@ minetest.register_node("mycoins:router_error", {
 		minetest.swap_node(pos, {name = 'mycoins:router', param2 = node.param2})
 		local meta = minetest.get_meta(pos)
 		meta:set_string("formspec", default.router_off_formspec(pos))
-		meta:set_string("infotext", "Router")
+			meta:set_string("infotext", "Router (owner "..meta:get_string("owner")..")")
 	end,
 	on_timer = function(pos)
 		default.find_network(pos)
@@ -236,7 +248,7 @@ minetest.register_node("mycoins:router_error", {
 			local meta = minetest.get_meta(pos)
 			minetest.swap_node(pos, {name = 'mycoins:router_error', param2 = node.param2})
 			meta:set_string("formspec", default.router_error_formspec(pos))
-			meta:set_string("infotext", "Router")
+			meta:set_string("infotext", "Router (owner "..meta:get_string("owner")..")")
 			timer:start(10)
 		else
 			local timer = minetest.get_node_timer(pos)
@@ -244,18 +256,10 @@ minetest.register_node("mycoins:router_error", {
 			local meta = minetest.get_meta(pos)
 			minetest.swap_node(pos, {name = 'mycoins:router_on', param2 = node.param2})
 			meta:set_string("formspec", default.router_formspec(pos))
-			meta:set_string("infotext", "Router")
+			meta:set_string("infotext", "Router (owner "..meta:get_string("owner")..")")
 			timer:start(10)
 		end
 		
-	end,
-	after_place_node = function(pos)
-		local timer = minetest.get_node_timer(pos)
-		local node = minetest.get_node(pos)
-		local meta = minetest.get_meta(pos)
-		meta:set_string("formspec", default.router_error_formspec(pos))
-		meta:set_string("infotext", "Router")
-		timer:start(10)
 	end,
 	on_construct = function(pos)
 		local isp = minetest.find_node_near(pos, 30, {"mycoins:isp_on"})
@@ -264,14 +268,18 @@ minetest.register_node("mycoins:router_error", {
 			local meta = minetest.get_meta(pos)
 			minetest.swap_node(pos, {name = 'mycoins:router_error', param2 = node.param2})
 			meta:set_string("formspec", default.router_error_formspec(pos))
-			meta:set_string("infotext", "Router")
+			meta:set_string("infotext", "Router (owner "..meta:get_string("owner")..")")
 		else
 			local node = minetest.get_node(pos)
 			local meta = minetest.get_meta(pos)
 			minetest.swap_node(pos, {name = 'mycoins:router_on', param2 = node.param2})
 			meta:set_string("formspec", default.router_formspec(pos))
-			meta:set_string("infotext", "Router")
+			meta:set_string("infotext", "Router (owner "..meta:get_string("owner")..")")
 		end
+	end,
+	can_dig = function(pos, player)
+		local meta = minetest.get_meta(pos);
+		return isp_owner(meta, player)
 	end,
 })
 

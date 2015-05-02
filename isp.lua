@@ -1,6 +1,6 @@
 -- internet usage timer config
 payment_bitcoin = 24000
-payment_bitqu = 60000
+payment_bitqu = 6000
 payment_bitdi = 2400
 payment_bitni = 1200
 payment_bitcent = 600
@@ -154,6 +154,7 @@ minetest.register_node("mycoins:isp_on", {
 		},
 	},
 	on_punch = function(pos)
+
 		local timer = minetest.get_node_timer(pos)
 		local node = minetest.get_node(pos)
 		local meta = minetest.get_meta(pos)
@@ -163,6 +164,7 @@ minetest.register_node("mycoins:isp_on", {
 		local inv = meta:get_inventory()
 		inv:set_size("main", 1*1)
 		timer:stop()
+
 	end,
 	on_timer = function(pos)
 		local meta = minetest.get_meta(pos)

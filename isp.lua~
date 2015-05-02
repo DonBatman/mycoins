@@ -1,6 +1,6 @@
 -- internet usage timer config
 payment_bitcoin = 24000
-payment_bitqu = 60000
+payment_bitqu = 6000
 payment_bitdi = 2400
 payment_bitni = 1200
 payment_bitcent = 600
@@ -153,7 +153,9 @@ minetest.register_node("mycoins:isp_on", {
 			{-0.122825, -0.315951, -0.374616, 0.122825, 0.371166, 0.375},
 		},
 	},
-	on_punch = function(pos)
+	on_punch = function(pos, listname, index, stack, player)
+	local meta = minetest.get_meta(pos)
+	if isp_owner(meta, player) then
 		local timer = minetest.get_node_timer(pos)
 		local node = minetest.get_node(pos)
 		local meta = minetest.get_meta(pos)
@@ -162,17 +164,12 @@ minetest.register_node("mycoins:isp_on", {
 		meta:set_string("infotext", "Internet Service Provider (owner "..meta:get_string("owner")..")")
 		local inv = meta:get_inventory()
 		inv:set_size("main", 1*1)
-		timer:start(2)
+		timer:stop()
+	end
 	end,
 	on_timer = function(pos)
-		local timer = minetest.get_node_timer(pos)
 		local meta = minetest.get_meta(pos)
-		meta:set_string("formspec", default.isp_on_formspec(pos))
-		meta:set_string("infotext", "Internet Service Provider (owner "..meta:get_string("owner")..")")
-		local inv = meta:get_inventory()
-		inv:set_size("main", 1*1)
-		local payment = inv:get_stack("main", 1)
-		if payment:get_name()== "" then
+		if ( minetest.get_player_by_name(meta:get_string("owner")) == nil ) then
 			local timer = minetest.get_node_timer(pos)
 			local node = minetest.get_node(pos)
 			local meta = minetest.get_meta(pos)
@@ -183,46 +180,75 @@ minetest.register_node("mycoins:isp_on", {
 			inv:set_size("main", 1*1)
 			timer:stop()
 		else
-			if payment:get_name()=="mycoins:bitcoin" then
-				payment:take_item()
-      		inv:set_stack("main",1,payment)
-				timer:start(payment_bitcoin)
+			local timer = minetest.get_node_timer(pos)
+			local meta = minetest.get_meta(pos)
+			meta:set_string("formspec", default.isp_on_formspec(pos))
+			meta:set_string("infotext", "Internet Service Provider (owner "..meta:get_string("owner")..")")
+			local inv = meta:get_inventory()
+			inv:set_size("main", 1*1)
+			local payment = inv:get_stack("main", 1)
+			if payment:get_name()== "" then
+				local timer = minetest.get_node_timer(pos)
+				local node = minetest.get_node(pos)
+				local meta = minetest.get_meta(pos)
+				minetest.swap_node(pos, {name = 'mycoins:isp', param2 = node.param2})
+				meta:set_string("formspec", default.isp_off_formspec(pos))
+				meta:set_string("infotext", "Internet Service Provider (owner "..meta:get_string("owner")..")")
+				local inv = meta:get_inventory()
+				inv:set_size("main", 1*1)
+				timer:stop()
 			else
-				if payment:get_name()=="mycoins:bitqu" then
+				if payment:get_name()=="mycoins:bitcoin" then
 					payment:take_item()
-      			inv:set_stack("main",1,payment)
-					timer:start(payment_bitqu)
+  		    		inv:set_stack("main",1,payment)
+					timer:start(payment_bitcoin)
 				else
-					if payment:get_name()=="mycoins:bitdi" then
+					if payment:get_name()=="mycoins:bitqu" then
 						payment:take_item()
-      				inv:set_stack("main",1,payment)
-						timer:start(payment_bitdi)
+  	   	 			inv:set_stack("main",1,payment)
+						timer:start(payment_bitqu)
 					else
-						if payment:get_name()=="mycoins:bitni" then
+						if payment:get_name()=="mycoins:bitdi" then
 							payment:take_item()
-      					inv:set_stack("main",1,payment)
-							timer:start(payment_bitni)
+     		 				inv:set_stack("main",1,payment)
+							timer:start(payment_bitdi)
 						else
-							if payment:get_name()=="mycoins:bitcent" then
+							if payment:get_name()=="mycoins:bitni" then
 								payment:take_item()
       						inv:set_stack("main",1,payment)
-								timer:start(payment_bitcent)
+								timer:start(payment_bitni)
 							else
-								local timer = minetest.get_node_timer(pos)
-								local node = minetest.get_node(pos)
-								local meta = minetest.get_meta(pos)
-								local inv = meta:get_inventory()
-								minetest.swap_node(pos, {name = 'mycoins:isp', param2 = node.param2})
-								meta:set_string("formspec", default.isp_off_formspec(pos))
-								meta:set_string("infotext", "Internet Service Provider (owner "..meta:get_string("owner")..")")
-								inv:set_size("main", 1*1)
-								timer:stop()
+								if payment:get_name()=="mycoins:bitcent" then
+									payment:take_item()
+      							inv:set_stack("main",1,payment)
+									timer:start(payment_bitcent)
+								else
+									local timer = minetest.get_node_timer(pos)
+									local node = minetest.get_node(pos)
+									local meta = minetest.get_meta(pos)
+									local inv = meta:get_inventory()
+									minetest.swap_node(pos, {name = 'mycoins:isp', param2 = node.param2})
+									meta:set_string("formspec", default.isp_off_formspec(pos))
+									meta:set_string("infotext", "Internet Service Provider (owner "..meta:get_string("owner")..")")
+									inv:set_size("main", 1*1)
+									timer:stop()
+								end
 							end
 						end
 					end
 				end
 			end
 		end
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
 	end,
 	can_dig = function(pos, player)
 		local meta = minetest.get_meta(pos);
