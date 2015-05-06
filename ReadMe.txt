@@ -1,18 +1,26 @@
 
 --+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 --                                                                                    +
---bitcoins v2.0 by MilesDyson@DistroGeeks.com                                         +
+--bitcoins v2.5 by MilesDyson@zoho.com                                         +
 --                                                                                    +
 --LICENSE: WTFPL DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE; applies to all parts.   +
 --                                                                                    +
---Have ideas on ways to make this mod better? email me at milesdyson@distrogeeks.com  +
+--Have ideas on ways to make this mod better? email me at milesdyson@zoho.com  +
 --                                                                                    +
 --+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 
 This mod will add bitcoins to your map, (NOT REAL BITCOINS) but the basic idea of bitcoins..
 
 My first mod for minetest, I plan to expand this mod a bit more as time permits..
+
+Bitcoins Mod:
+
+create a network containing at least one isp and one computer within a radius of 3 nodes to connect to the internet and mine coins, 
+add a router to increase its radius to 30 nodes for larger networks.. all computers must have internet access to mine, with
+3 levels of craft able computers, home computer, gaming computer and alienware computer, each with two more levels of upgrades,
+each level increasing the speed of the mining process, the isp box requires payment for your internet access,
+place bitcoins into the payment slot and turn it on.. then boot your computers.. all computers will shutdown after the player
+logs out or the isp box shuts down due to none payment...
 
 
 3/9/13 Added denominations of bitcoin Bitcent,Bitnickel,Bitdime,Bitquarter.
@@ -40,8 +48,9 @@ My first mod for minetest, I plan to expand this mod a bit more as time permits.
 05/01/15 ips box now works as intended and is an owned node, only bitcoins are excepted right now
 	updated formspec to show isp's computer's and router's counts withing its range.. improved a few functions..
 	router is now an owned node
-	
-	
-	
+05/05/15 condensed a lot of code, computers are now upgradeable by adding video cards to the form spec, separated computers into dif
+	files changed some crafting recipes, added video card type check to timer, if not compatible card then computer crashes ..
+	added random numbers to the miner timers of all computers to better simulate luck in the mining process 
+
 	
 Enjoy!! :D

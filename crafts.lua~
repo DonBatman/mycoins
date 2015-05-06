@@ -35,7 +35,7 @@ minetest.register_craft({
 minetest.register_craft({
     output = "mycoins:home_computer_powersupply";
     recipe = {
-        { "mycoins:copper_ribbonwire", "mycoins:copper_ribbonwire", "mycoins:copper_ribbonwire", },
+        { "mycoins:ribbonwire", "mycoins:ribbonwire", "mycoins:ribbonwire", },
         { "default:steel_ingot", "default:steelblock", "default:steel_ingot", },
         { "homedecor:ic", "homedecor:ic", "homedecor:ic", },
     };
@@ -411,7 +411,7 @@ minetest.register_craft({
     recipe = {
         { "default:steel_ingot", "homedecor:ic", "default:steel_ingot", },
         { "homedecor:ic", "default:mese", "homedecor:ic", },
-        { "homedecor:plastic_sheet", "homedecor:plastic_sheet", "homedecor:plastic_sheet", },
+        { "homedecor:plastic_sheeting", "homedecor:plastic_sheeting", "homedecor:plastic_sheeting", },
     };
 });
 
@@ -419,7 +419,7 @@ minetest.register_craft({
 -- copper wire
 
 minetest.register_craft({
-    output = "mycoins:copper_ribbonwire 12";
+    output = "mycoins:copper_ribbonwire 9";
     recipe = {
         { "default:copper_ingot", "default:copper_ingot", "default:copper_ingot", },
     };
@@ -430,7 +430,7 @@ minetest.register_craft({
     recipe = {
         { "dye:red", "dye:green", "dye:yellow", },
         { "mycoins:copper_ribbonwire", "mycoins:copper_ribbonwire", "mycoins:copper_ribbonwire", },
-        { "homedecor:plastic_sheeting", "homedecor:plastic_sheeting", "homedecor:plastic_sheeting", },
+        { "dye:blue", "homedecor:plastic_sheeting", "dye:violet", },
     };
 });
 
@@ -439,8 +439,8 @@ minetest.register_craft({
 minetest.register_craft({
     output = "mycoins:isp";
     recipe = {
-        { "default:gold_ingot", "mycoins:bitcoin", "default:silver_ingot", },
-        { "mycoins:ribbonwire", "default:steelblock", "mycoins:ribbonwire", },
+        { "mycoins:copper_ribbonwire", "homedecor:ic", "default:clay_lump", },
+        { "mycoins:ribbonwire", "homedecor:ic", "mycoins:ribbonwire", },
         { "homedecor:plastic_sheeting", "homedecor:plastic_sheeting", "homedecor:plastic_sheeting", },
     };
 });

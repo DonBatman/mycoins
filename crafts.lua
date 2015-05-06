@@ -6,8 +6,8 @@
 minetest.register_craft({
     output = "mycoins:home_computer";
     recipe = {
-        { "mycoins:home_computer_powersupply", "mycoins:home_computer_ram", "mycoins:home_computer_cdrom", },
-        { "mycoins:home_computer_video", "mycoins:home_computer_cpu", "mycoins:home_computer_fan", },
+        { "mycoins:home_computer_powersupply", "mycoins:ribbonwire", "mycoins:home_computer_cdrom", },
+        { "mycoins:home_computer_ram", "mycoins:home_computer_cpu", "mycoins:home_computer_fan", },
         { "mycoins:home_computer_soundcard", "mycoins:home_computer_motherboard", "mycoins:home_computer_harddrive", },
     };
 });
@@ -101,8 +101,8 @@ minetest.register_craft({
 minetest.register_craft({
     output = "mycoins:game_computer";
     recipe = {
-        { "mycoins:game_computer_powersupply", "mycoins:game_computer_ram", "mycoins:game_computer_dvdrom", },
-        { "mycoins:game_computer_video", "mycoins:game_computer_cpu", "mycoins:home_computer", },
+        { "mycoins:game_computer_powersupply", "mycoins:ribbonwire", "mycoins:game_computer_dvdrom", },
+        { "mycoins:game_computer_ram", "mycoins:game_computer_cpu", "mycoins:home_computer", },
         { "mycoins:game_computer_soundcard", "mycoins:game_computer_motherboard", "mycoins:game_computer_harddrive", },
     };
 });
@@ -183,8 +183,8 @@ minetest.register_craft({
 minetest.register_craft({
     output = "mycoins:alien_computer";
     recipe = {
-        { "mycoins:alien_computer_powersupply", "mycoins:alien_computer_ram", "mycoins:alien_computer_cooler", },
-        { "mycoins:alien_computer_video", "mycoins:alien_computer_cpu", "mycoins:game_computer", },
+        { "mycoins:alien_computer_powersupply", "mycoins:ribbonwire", "mycoins:alien_computer_cooler", },
+        { "mycoins:alien_computer_ram", "mycoins:alien_computer_cpu", "mycoins:game_computer", },
         { "mycoins:alien_computer_soundcard", "mycoins:alien_computer_motherboard", "mycoins:alien_computer_harddrive", },
     };
 });
