@@ -1,7 +1,7 @@
 math.randomseed(os.time())
 
 alien_boot = 30					-- seconds it takes to boot the computer
-alien_miner = math.random(275,325)					-- seconds it takes to mine one bitcent
+alien_miner = math.random(250,325)					-- seconds it takes to mine one bitcent
 alien_upgrade_step = 45			-- seconds to subtract from alien_miner per upgrade
 
 local function computer_owner(meta, player)

@@ -1,6 +1,6 @@
 math.randomseed(os.time())
 game_boot = 45												-- seconds it takes to boot the computer
-game_miner = math.random(375,425)					-- seconds it takes to mine one bitcent default 400
+game_miner = math.random(350,425)					-- seconds it takes to mine one bitcent default 400
 game_upgrade_step = 30									-- seconds to subtract from game_miner per upgrade
 
 local function computer_owner(meta, player)
@@ -142,7 +142,7 @@ end
 -- Alienware Computer
 minetest.register_node("mycoins:game_computer",{
 	drawtype = "nodebox",
-	description = "Alienware Computer",
+	description = "Game Computer",
 	tiles = {"mycoins_game_computer_tp.png","mycoins_game_computer_bt.png","mycoins_game_computer_rt.png","mycoins_game_computer_lt.png","mycoins_game_computer_bk.png","mycoins_game_computer_ft_off.png"},
 	paramtype = "light",
 	paramtype2 = "facedir",
@@ -276,7 +276,7 @@ minetest.register_node("mycoins:game_computer",{
 
 minetest.register_node("mycoins:game_computer_active",{
 	drawtype = "nodebox",
-	description = "Alienware Computer",
+	description = "Game Computer",
 	tiles = {"mycoins_game_computer_tp.png","mycoins_game_computer_bt.png","mycoins_game_computer_rt.png","mycoins_game_computer_lt.png","mycoins_game_computer_bk.png","mycoins_game_computer_ft.png"},
 	paramtype = "light",
 	paramtype2 = "facedir",
