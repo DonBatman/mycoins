@@ -107,7 +107,7 @@ function default.game_off(pos)
 	local inv = meta:get_inventory()
 	minetest.swap_node(pos, {name = 'mycoins:game_computer', param2 = node.param2})
 	meta:set_string("formspec", default.game_off_formspec(pos))
-	meta:set_string("infotext", "Alienware Computer (owner "..
+	meta:set_string("infotext", "Game Computer (owner "..
 	meta:get_string("owner")..")")
 	inv:set_size("main", 1*1)
 	timer:stop()
@@ -120,7 +120,7 @@ function default.game_wifi(pos)
 	local inv = meta:get_inventory()
 	minetest.swap_node(pos, {name = 'mycoins:game_computer', param2 = node.param2})
 	meta:set_string("formspec", default.game_wifi_formspec(pos))
-	meta:set_string("infotext", "Alienware Computer (owner "..
+	meta:set_string("infotext", "Game Computer (owner "..
 	meta:get_string("owner")..")")
 	inv:set_size("main", 1*1)
 	timer:stop()
@@ -132,14 +132,14 @@ function default.game_boot(pos)
 	local node = minetest.get_node(pos)
 	local inv = meta:get_inventory()		
 	meta:set_string("formspec", default.game_boot_formspec(pos))
-	meta:set_string("infotext", "Alienware Computer (owner "..
+	meta:set_string("infotext", "Game Computer (owner "..
 	meta:get_string("owner")..")")
 	inv:set_size("main", 1*1)
 	timer:start(game_boot)
 end
 
 
--- Alienware Computer
+-- Game Computer
 minetest.register_node("mycoins:game_computer",{
 	drawtype = "nodebox",
 	description = "Game Computer",
@@ -167,7 +167,7 @@ minetest.register_node("mycoins:game_computer",{
 		local meta = minetest.get_meta(pos)
 		local inv = meta:get_inventory()
 		meta:set_string("formspec", default.game_boot_formspec(pos))
-		meta:set_string("infotext", "Alienware Computer (owner "..
+		meta:set_string("infotext", "Game Computer (owner "..
 		meta:get_string("owner")..")")
 		inv:set_size("main", 1*1)
 		inv:set_size("exp1", 1*1)
@@ -191,7 +191,7 @@ minetest.register_node("mycoins:game_computer",{
 					local inv = meta:get_inventory()
 					minetest.swap_node(pos, {name = 'mycoins:game_computer_active', param2 = node.param2})
 					meta:set_string("formspec", default.game_active_formspec(pos))
-					meta:set_string("infotext", "Alienware Computer (owner "..
+					meta:set_string("infotext", "Game Computer (owner "..
 					meta:get_string("owner")..")")
 					inv:set_size("main", 1*1)
 					if ( upgrade_timer(pos) < game_miner ) then
@@ -212,7 +212,7 @@ minetest.register_node("mycoins:game_computer",{
 				local inv = meta:get_inventory()
 				minetest.swap_node(pos, {name = 'mycoins:game_computer_active', param2 = node.param2})
 				meta:set_string("formspec", default.game_active_formspec(pos))
-				meta:set_string("infotext", "Alienware Computer (owner "..
+				meta:set_string("infotext", "Game Computer (owner "..
 				meta:get_string("owner")..")")
 				inv:set_size("main", 1*1)
 				if ( upgrade_timer(pos) < game_miner ) then
